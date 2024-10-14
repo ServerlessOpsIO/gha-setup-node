@@ -20,9 +20,10 @@ runs:
 
   steps:
 
-    - name: check working directory
+    - name: Change working directory
+      if: ${{ inputs.working_directory != '.' }}
       shell: bash
-      run: echo ${{ github.workspace }}
+      run: cd ${{ inputs.working_directory }}
 
     - name: Check NodeJS version
       id: check-node-version
@@ -47,12 +48,12 @@ runs:
         node-version: '${{ inputs.node_version }}'
         node-version-file: '${{ inputs.node_version_file }}'
         cache: yarn
+        cache-dependency-path: 'https://registry.npm.taobao.org'
 
 
     - name: Check yarn.lock
       id: check-yarn-lock
       shell: bash
-      working-directory: ${{ inputs.working_directory }}
       run: |
         if [ -f yarn.lock ]; \
         then \
@@ -64,7 +65,6 @@ runs:
     - name: Install dependencies
       id: install-node-deps
       shell: bash
-      working-directory: ${{ inputs.working_directory }}
       env:
         HAS_YARN_LOCK: ${{ steps.check-pipfile-lock.outputs.has-lock }}
       run: |
