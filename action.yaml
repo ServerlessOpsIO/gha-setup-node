@@ -42,7 +42,7 @@ runs:
         node-version: '${{ inputs.node_version }}'
         node-version-file: '${{ inputs.node_version_file }}'
         cache: yarn
-        cache-dependency-path: 'https://registry.npm.taobao.org'
+        cache-dependency-path: ${{ inputs.working_directory }}/yarn.lock
 
 
     - name: Check yarn.lock
