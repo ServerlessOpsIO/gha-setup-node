@@ -38,7 +38,6 @@ runs:
     - name: Setup NodeJS
       id: install-node
       uses: actions/setup-node@v4
-      working-directory: ${{ inputs.working_directory }}
       with:
         node-version: '${{ inputs.node_version }}'
         node-version-file: '${{ inputs.node_version_file }}'
