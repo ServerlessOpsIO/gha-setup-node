@@ -1,0 +1,73 @@
+name: setup-node
+description: Installs NodeJS and project dependencies
+
+inputs:
+  node_version:
+    description: NodeJS version (latest LTS by default)
+    required: false
+    default: null
+  node_version_file:
+    description: NodeJS version file
+    required: false
+    default: null
+
+runs:
+  using: composite
+
+  steps:
+    - name: Check NodeJS version
+      id: check-node-version
+      if: ${{ inputs.node_version == null && inputs.node_version_file == null }}
+      shell: bash
+      env:
+        NODE_VERSION: ${{ inputs.node_version }}
+        NODE_VERSION_FILE: ${{ inputs.node_version_file }}
+      run: |
+        if [ -z "$NODE_VERSION" ] && [ -z "$NODE_VERSION_FILE" ]; then
+          echo "Must set either node_version or node_version_file"
+          exit 1
+        elif [ -n "$NODE_VERSION" ] && [ -n "$NODE_VERSION_FILE" ]; then
+          echo "Cannot set both node_version and node_version_file"
+          exit 1
+        fi
+
+    - name: Setup NodeJS
+      id: install-node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '${{ inputs.node_version }}'
+        node-version-file: '${{ inputs.node_version_file }}'
+        cache: yarn
+
+
+    - name: Check yarn.lock
+      id: check-yarn-lock
+      shell: bash
+      run: |
+        if [ -f yarn.lock ]; \
+        then \
+          echo "has-lock=true" >> $GITHUB_OUTPUT; \
+        else \
+          echo "has-lock=false" >> $GITHUB_OUTPUT; \
+        fi
+
+    - name: Install dependencies
+      id: install-node-deps
+      shell: bash
+      env:
+        HAS_YARN_LOCK: ${{ steps.check-pipfile-lock.outputs.has-lock }}
+      run: |
+        if [ $HAS_YARN_LOCK == "true" ];
+        then
+          yarn install --frozen-lockfile --immutable;
+        else
+          yarn install;
+        fi
+
+outputs:
+  node-version:
+    description: NodeJS version
+    value: ${{ steps.install-node.outputs.node-version }}
+  cache-hit:
+    description: Cache hit
+    value: ${{ steps.install-node.outputs.cache-hit }}
