@@ -1,7 +1,7 @@
 # gha-setup-node
 This GitHub Action sets up a NodeJS environment for use in workflows.
 
-_*NOTE: This workflow is opinionated and meets the needs of its author. It is provided publicly as a reference for others to use and modify as needed.*_
+_**NOTE: This workflow is opinionated and meets the needs of its author. It is provided publicly as a reference for others to use and modify as needed.**_
 
 This action will perform the following actions:
 * Install nodejs
