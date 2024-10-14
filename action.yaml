@@ -5,11 +5,11 @@ inputs:
   node_version:
     description: NodeJS version (latest LTS by default)
     required: false
-    default: null
+    default: ''
   node_version_file:
     description: NodeJS version file
     required: false
-    default: null
+    default: ''
 
 runs:
   using: composite
@@ -17,7 +17,6 @@ runs:
   steps:
     - name: Check NodeJS version
       id: check-node-version
-      if: ${{ inputs.node_version == null && inputs.node_version_file == null }}
       shell: bash
       env:
         NODE_VERSION: ${{ inputs.node_version }}
