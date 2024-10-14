@@ -19,6 +19,11 @@ runs:
   using: composite
 
   steps:
+
+    - name: check working directory
+      shell: bash
+      run: echo ${{ github.workspace }}
+
     - name: Check NodeJS version
       id: check-node-version
       shell: bash
