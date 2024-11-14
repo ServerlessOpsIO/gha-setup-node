@@ -1,0 +1,13 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: gha-setup-node
+  description: Github Action to setup NodeJS
+  annotations:
+    github.com/project-slug: ServerlessOpsIO/gha-setup-node
+spec:
+  type: gha-action
+  lifecycle: production
+  owner: group:developers
+  system: system:github-actions
