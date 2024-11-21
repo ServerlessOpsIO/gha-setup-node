@@ -35,6 +35,12 @@ runs:
           exit 1
         fi
 
+    # Handles known issue with setting packageManager in package.json and
+    # enabling caching here.
+    - name: Install Yarn via corepack
+      shell: bash
+      run: corepack enable
+
     - name: Setup NodeJS
       id: install-node
       uses: actions/setup-node@v4
@@ -43,7 +49,6 @@ runs:
         node-version-file: '${{ inputs.node_version_file }}'
         cache: yarn
         cache-dependency-path: ${{ inputs.working_directory }}/yarn.lock
-
 
     - name: Check yarn.lock
       id: check-yarn-lock
